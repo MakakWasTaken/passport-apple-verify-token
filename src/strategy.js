@@ -142,18 +142,15 @@ class AppleTokenStrategy extends Strategy {
     const key = jose.JWKS.asKeyStore(appleJWKS);
 
     try {
-      console.log(idToken, key);
       const verified = jose.JWT.verify(idToken, key, {
         issuer: this.appleIssuer,
         audience: this.clientId,
       });
-      console.log(verified);
 
       if (verified) {
         return verified;
       }
     } catch (e) {
-      console.error(e);
       throw e;
     }
   }

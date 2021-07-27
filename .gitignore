@@ -5,3 +5,4 @@ TEST-RESULTS.xml
 
 /coverage
 /.nyc_output
+.DS_Store

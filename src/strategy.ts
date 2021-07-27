@@ -1,19 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /**
  * Module dependencies.
  */
 import { Strategy } from 'passport-strategy';
-import axios, {
-  AxiosRequestConfig,
-  AxiosResponse,
-  AxiosError,
-} from "axios";
+import axios from 'axios';
 import * as jose from 'jose';
 
 type Options = {
-  clientId?: string | string[],
-  appleIdKeysUrl?: string,
-  passReqToCallback?: boolean,
-  appleIssuer?: string
+  clientId?: string | string[];
+  appleIdKeysUrl?: string;
+  passReqToCallback?: boolean;
+  appleIssuer?: string;
 };
 
 /**
@@ -71,7 +72,7 @@ export class AppleTokenStrategy extends Strategy {
       throw new Error('AppleVerifyTokenStrategy requires a verify function');
     }
 
-    if(!options.clientId) {
+    if (!options.clientId) {
       throw new Error('AppleVerifyTokenStrategy requires a clientId');
     }
 
@@ -84,7 +85,6 @@ export class AppleTokenStrategy extends Strategy {
     this.name = 'apple-verify-token';
 
     this.verify = verify;
-
   }
 
   /**
@@ -105,7 +105,7 @@ export class AppleTokenStrategy extends Strategy {
       return this.fail({ message: 'no ID token provided' }, 401);
     }
 
-    this.verifyAppleToken(idToken)
+    return this.verifyAppleToken(idToken)
       .then((appleIdDecoded) => {
         const verified = (error: any, user: any, infoOnUser: any) => {
           if (error) {
@@ -123,34 +123,27 @@ export class AppleTokenStrategy extends Strategy {
           this.verify(appleIdDecoded, appleIdDecoded.sub, verified);
         }
       })
-      .catch(error => this.fail({ message: error.message }, 401))
-
+      .catch((error) => this.fail({ message: error.message }, 401));
   }
 
   /**
    * Verify signature and token fields
    * To verify the identity token, your app server must:
    * Verify the JWS E256 signature using the server’s public key
-   * 
+   *
    * Verify the nonce for the authentication
-   * 
+   *
    * Verify that the iss field contains https://appleid.apple.com
-   * 
+   *
    * Verify that the aud field is the developer’s client_id
-   * 
+   *
    * Verify that the time is earlier than the exp value of the token
    *
    * @param {String} idToken
    * @api protected
    */
   async verifyAppleToken(idToken: string): Promise<any> {
-
     // we configure jose
-    const {
-      JWKS,  // JSON Web Key Set (JWKS)
-      JWT,   // JSON Web Token (JWT)
-      errors // errors utilized by jose
-    } = jose;
     // we request the public keys from apple
     const axiosResponse = await axios.get(this.appleIdKeysUrl);
     const appleJWKS = axiosResponse.data;
@@ -161,7 +154,7 @@ export class AppleTokenStrategy extends Strategy {
     try {
       const verified = jose.JWT.verify(idToken, key, {
         issuer: this.appleIssuer,
-        audience: this.clientId
+        audience: this.clientId,
       });
 
       if (verified) {

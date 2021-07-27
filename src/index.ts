@@ -1,1 +1,1 @@
-export { AppleTokenStrategy as Strategy } from "./strategy";
+export { AppleTokenStrategy as Strategy } from './strategy';

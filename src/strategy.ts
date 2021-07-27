@@ -34,18 +34,18 @@ type Options = {
  * Examples:
  *
  * passport.use(new AppleTokenStrategy({
- *     clientId: 'apple_client_id', // Specify the CLIENT_ID of the app that accesses the backend
- *     // Or, if multiple clients access the backend:
- *     //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
- *     appleIdKeysUrl?: 'https://appleid.apple.com/auth/keys', // OPTIONAL: Specify the url to get Apple auth keys
- *     passReqToCallback?: false, // OPTIONAL: Specify if the request is passed to callback
- *     appleIssuer?: 'https://appleid.apple.com' OPTIONAL: the Apple token issuer
- *   },
- *   function(parsedToken, appleId, done) {
- *     User.findOrCreate(..., function (err, user) {
- *       done(err, user);
- *     });
- *   }
+ * clientId: 'apple_client_id', // Specify the CLIENT_ID of the app that accesses the backend
+ * // Or, if multiple clients access the backend:
+ * //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+ * appleIdKeysUrl?: 'https://appleid.apple.com/auth/keys', // OPTIONAL: Specify the url to get Apple auth keys
+ * passReqToCallback?: false, // OPTIONAL: Specify if the request is passed to callback
+ * appleIssuer?: 'https://appleid.apple.com' OPTIONAL: the Apple token issuer
+ * },
+ * function(parsedToken, appleId, done) {
+ * User.findOrCreate(..., function (err, user) {
+ * done(err, user);
+ * });
+ * }
  * ));
  *
  * @param {Object} options

@@ -6,7 +6,7 @@
 /**
  * Module dependencies.
  */
-const Strategy = require("passport-strategy").Strategy
+const Strategy = require("passport-strategy").Strategy;
 const axios = require("axios");
 const jose = require("jose");
 
@@ -46,30 +46,30 @@ const jose = require("jose");
  * @api public
  */
 class AppleTokenStrategy extends Strategy {
-
   constructor(options, verify) {
     super();
 
-    if (typeof options === 'function') {
+    if (typeof options === "function") {
       verify = options;
       options = {};
     }
 
     if (!verify) {
-      throw new Error('AppleVerifyTokenStrategy requires a verify function');
+      throw new Error("AppleVerifyTokenStrategy requires a verify function");
     }
 
     if (!options.clientId) {
-      throw new Error('AppleVerifyTokenStrategy requires a clientId');
+      throw new Error("AppleVerifyTokenStrategy requires a clientId");
     }
 
-    this.appleIdKeysUrl = options.appleIdKeysUrl || 'https://appleid.apple.com/auth/keys';
-    this.appleIssuer = options.appleIssuer || 'https://appleid.apple.com';
+    this.appleIdKeysUrl =
+      options.appleIdKeysUrl || "https://appleid.apple.com/auth/keys";
+    this.appleIssuer = options.appleIssuer || "https://appleid.apple.com";
     this.clientId = options.clientId;
 
     this.passReqToCallback = options.passReqToCallback || false;
 
-    this.name = 'apple-verify-token';
+    this.name = "apple-verify-token";
 
     this.verify = verify;
   }
@@ -84,12 +84,12 @@ class AppleTokenStrategy extends Strategy {
     options = options || {};
 
     const idToken =
-      this.paramFromRequest(req, 'id_token') ||
-      this.paramFromRequest(req, 'access_token') ||
+      this.paramFromRequest(req, "id_token") ||
+      this.paramFromRequest(req, "access_token") ||
       this.getBearerToken(req.headers);
 
     if (!idToken) {
-      return this.fail({ message: 'no ID token provided' }, 401);
+      return this.fail({ message: "no ID token provided" }, 401);
     }
 
     return this.verifyAppleToken(idToken)
@@ -174,15 +174,15 @@ class AppleTokenStrategy extends Strategy {
     if (headers[name]) {
       return headers[name];
     }
-    return params[name] || '';
+    return params[name] || "";
   }
 
-  getBearerToken(headers){
+  getBearerToken(headers) {
     if (headers && headers.authorization) {
-      const parts = headers.authorization.split(' ');
-      return parts.length === 2 && parts[0] === 'Bearer' ? parts[1] : undefined;
+      const parts = headers.authorization.split(" ");
+      return parts.length === 2 && parts[0] === "Bearer" ? parts[1] : undefined;
     }
   }
 }
 
-export default AppleTokenStrategy
+module.exports = AppleTokenStrategy;

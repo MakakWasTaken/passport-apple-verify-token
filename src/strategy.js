@@ -11,7 +11,7 @@
  */
 const Strategy = require("passport-strategy").Strategy;
 const axios = require("axios");
-const jose = require("jose");
+const jwt = require("jsonwebtoken");
 
 /**
  * `Strategy` constructor.
@@ -136,13 +136,10 @@ class AppleTokenStrategy extends Strategy {
     // we configure jose
     // we request the public keys from apple
     const axiosResponse = await axios.get(this.appleIdKeysUrl);
-    const appleJWKS = axiosResponse.data;
-
-    // we set the keys on jose
-    const key = jose.JWKS.asKeyStore(appleJWKS);
+    const response = axiosResponse.data;
 
     try {
-      const verified = jose.JWT.verify(idToken, key, {
+      const verified = jwt.verify(idToken, response, {
         issuer: this.appleIssuer,
         audience: this.clientId,
       });

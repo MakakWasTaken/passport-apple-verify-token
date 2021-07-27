@@ -6,16 +6,9 @@
 /**
  * Module dependencies.
  */
-import { Strategy } from 'passport-strategy';
-import axios from 'axios';
-import * as jose from 'jose';
-
-type Options = {
-  clientId?: string | string[];
-  appleIdKeysUrl?: string;
-  passReqToCallback?: boolean;
-  appleIssuer?: string;
-};
+const Strategy = require("passport-strategy").Strategy
+const axios = require("axios");
+const jose = require("jose");
 
 /**
  * `Strategy` constructor.
@@ -52,15 +45,9 @@ type Options = {
  * @param {Function} verify
  * @api public
  */
-export class AppleTokenStrategy extends Strategy {
-  public name: string;
-  public verify: (...args: any[]) => void;
-  public passReqToCallback: boolean;
-  public appleIdKeysUrl: string;
-  public clientId?: string | string[];
-  public appleIssuer?: string;
+class AppleTokenStrategy extends Strategy {
 
-  constructor(options: (() => Options) | Options, verify?: (...args: any[]) => void) {
+  constructor(options, verify) {
     super();
 
     if (typeof options === 'function') {
@@ -93,7 +80,7 @@ export class AppleTokenStrategy extends Strategy {
    * @param {Object} req
    * @api protected
    */
-  public authenticate(req: any, options: Options) {
+  authenticate(req, options) {
     options = options || {};
 
     const idToken =
@@ -107,7 +94,7 @@ export class AppleTokenStrategy extends Strategy {
 
     return this.verifyAppleToken(idToken)
       .then((appleIdDecoded) => {
-        const verified = (error: any, user: any, infoOnUser: any) => {
+        const verified = (error, user, infoOnUser) => {
           if (error) {
             return this.error(error);
           }
@@ -142,7 +129,7 @@ export class AppleTokenStrategy extends Strategy {
    * @param {String} idToken
    * @api protected
    */
-  async verifyAppleToken(idToken: string): Promise<any> {
+  async verifyAppleToken(idToken) {
     // we configure jose
     // we request the public keys from apple
     const axiosResponse = await axios.get(this.appleIdKeysUrl);
@@ -173,7 +160,7 @@ export class AppleTokenStrategy extends Strategy {
    * @param {string} name  the key to use to lookup id token in req.
    * @api protected
    */
-  private paramFromRequest(req: any, name: string): string {
+  paramFromRequest(req, name) {
     const body = req.body || {};
     const query = req.query || {};
     const params = req.params || {};
@@ -190,10 +177,12 @@ export class AppleTokenStrategy extends Strategy {
     return params[name] || '';
   }
 
-  private getBearerToken(headers: { authorization: string }): string | undefined {
+  getBearerToken(headers){
     if (headers && headers.authorization) {
       const parts = headers.authorization.split(' ');
       return parts.length === 2 && parts[0] === 'Bearer' ? parts[1] : undefined;
     }
   }
 }
+
+export default AppleTokenStrategy

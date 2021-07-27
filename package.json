@@ -3,6 +3,7 @@
   "version": "1.1.1",
   "description": "Sign In with Apple Token strategy for Passport, let's you validate the user token server side, usefull for mobile app SignIn with Apple authentication for example. The validation is done by using the public AppleID authentication keys.",
   "main": "./src/index.js",
+  "types": "./src/index.d.ts",
   "files": [
     "src/**/*"
   ],

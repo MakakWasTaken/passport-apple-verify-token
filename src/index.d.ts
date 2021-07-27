@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import express from "express";
 import passport from "passport";
 
@@ -6,15 +7,11 @@ type Options = {
   appleIdKeysUrl?: string;
   passReqToCallback?: boolean;
   appleIssuer?: string;
-}
-
+};
 
 declare namespace PassportAppleToken {
   interface StrategyStatic {
-    new (
-      options: Options,
-      verify: VerifyFunction
-    ): StrategyInstance;
+    new (options: Options, verify: VerifyFunction): StrategyInstance;
     new (options: Options, verify: VerifyFunction): StrategyInstance;
   }
 
@@ -30,3 +27,6 @@ declare namespace PassportAppleToken {
     authenticate: (req: express.Request, options?: Options) => void;
   }
 }
+
+declare const PassportAppleToken: PassportAppleToken.StrategyStatic;
+export = PassportAppleToken;

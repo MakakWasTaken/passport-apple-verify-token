@@ -22,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.21.0",
-    "jsonwebtoken": "^8.5.1",
+    "jose": "^3.14.3",
     "passport-strategy": "^1.0.0"
   },
   "devDependencies": {
